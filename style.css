@@ -1,0 +1,63 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #000;
+  color: gold;
+  transition: background 0.3s, color 0.3s;
+}
+
+.light-mode {
+  background-color: #fff;
+  color: #000;
+}
+
+#splash {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+#splash img {
+  width: 150px;
+  margin-bottom: 20px;
+}
+
+.hidden {
+  display: none;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+section {
+  padding: 1rem;
+}
+
+#scanner {
+  width: 300px;
+  margin: auto;
+  padding: 1rem;
+}
+
+table {
+  width: 90%;
+  margin: 1rem auto;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid gold;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+button {
+  margin: 1rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}

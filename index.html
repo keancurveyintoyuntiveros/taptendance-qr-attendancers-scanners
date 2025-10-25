@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Taptendance</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+  <!-- Splash Screen -->
+  <div id="splash">
+    <img src="logo.png" alt="Taptendance Logo" />
+    <h1>Taptendance</h1>
+  </div>
+
+  <!-- Main App -->
+  <div id="app" class="hidden">
+    <header>
+      <h2>Taptendance Scanner</h2>
+      <button id="themeToggle">🌗 Toggle Theme</button>
+    </header>
+
+    <section>
+      <label for="cameraSelect">Choose Camera:</label>
+      <select id="cameraSelect"></select>
+      <button id="startScan">Start Scanner</button>
+    </section>
+
+    <div id="scanner"></div>
+
+    <table id="logTable">
+      <thead>
+        <tr>
+          <th>Name</th><th>ID</th><th>Address</th><th>Section</th><th>Time</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <button id="exportBtn">📤 Export to Excel</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
