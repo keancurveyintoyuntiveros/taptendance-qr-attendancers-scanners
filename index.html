@@ -11,7 +11,7 @@
 <body>
   <!-- Splash Screen -->
   <div id="splash">
-   <img src="assets/logo.png" alt="Taptendance Logo" />
+    <img src="assets/logo.png" alt="Taptendance Logo" />
     <h1>Taptendance</h1>
   </div>
 
@@ -26,6 +26,7 @@
       <label for="cameraSelect">Choose Camera:</label>
       <select id="cameraSelect"></select>
       <button id="startScan">Start Scanner</button>
+      <button id="stopScan">Stop Scanner</button>
     </section>
 
     <div id="scanner"></div>
@@ -33,18 +34,20 @@
     <table id="logTable">
       <thead>
         <tr>
-          <th>Name</th><th>ID</th><th>Address</th><th>Section</th><th>Time</th>
+          <th>Name</th><th>ID</th><th>Address</th><th>Section</th><th>Mode</th><th>Time</th>
         </tr>
       </thead>
       <tbody></tbody>
     </table>
 
+    <input type="text" id="filenameInput" placeholder="Enter filename..." />
     <button id="exportBtn">📤 Export to Excel</button>
   </div>
 
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
