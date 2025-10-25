@@ -1,15 +1,16 @@
-// Splash transition
+//splashie washie
+  
 setTimeout(() => {
   document.getElementById('splash').classList.add('hidden');
   document.getElementById('app').classList.remove('hidden');
 }, 2000);
 
-// Theme toggle
+// light mode or dark mode
 document.getElementById('themeToggle').onclick = () => {
   document.body.classList.toggle('light-mode');
 };
 
-// Camera selector
+// Camera select
 const cameraSelect = document.getElementById('cameraSelect');
 let selectedCameraId = null;
 
@@ -125,3 +126,4 @@ document.getElementById("exportBtn").onclick = () => {
   XLSX.utils.book_append_sheet(wb, ws, "Attendance");
   XLSX.writeFile(wb, `${filename}.xlsx`);
 };
+
