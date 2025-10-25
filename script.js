@@ -28,13 +28,25 @@ cameraSelect.onchange = () => {
 };
 
 let scanner = null;
+let isScanning = false;
+
 document.getElementById('startScan').onclick = () => {
   if (scanner) scanner.clear();
   scanner = new Html5Qrcode("scanner");
+  isScanning = true;
+
   scanner.start(
     selectedCameraId || { facingMode: "environment" },
     { fps: 10, qrbox: 250 },
-    qrCodeMessage => handleScan(qrCodeMessage),
+    async qrCodeMessage => {
+      if (!isScanning) return;
+
+      isScanning = false;
+      handleScan(qrCodeMessage);
+
+      await new Promise(resolve => setTimeout(resolve, 7000));
+      isScanning = true;
+    },
     error => {}
   );
 };
@@ -43,13 +55,14 @@ document.getElementById('stopScan').onclick = () => {
   if (scanner) {
     scanner.stop().then(() => {
       scanner.clear();
+      isScanning = false;
     }).catch(err => console.error("Stop failed", err));
   }
 };
 
 const logTable = document.querySelector("#logTable tbody");
 const attendanceData = [];
-const scannedRecords = {}; // Tracks student data and timestamps
+const scannedRecords = {};
 
 function handleScan(data) {
   try {
@@ -58,7 +71,6 @@ function handleScan(data) {
     const id = parsed.id;
 
     if (!scannedRecords[id]) {
-      // First scan: create record and row
       scannedRecords[id] = {
         name: parsed.name,
         address: parsed.address,
@@ -90,12 +102,10 @@ function handleScan(data) {
       });
 
     } else if (!scannedRecords[id].timeOut) {
-      // Second scan: update Time Out
       scannedRecords[id].timeOut = now;
       const row = scannedRecords[id].rowElement;
       row.cells[5].textContent = now;
 
-      // Update export data
       const record = attendanceData.find(r => r.ID === id);
       if (record) record.TimeOut = now;
 
@@ -115,4 +125,3 @@ document.getElementById("exportBtn").onclick = () => {
   XLSX.utils.book_append_sheet(wb, ws, "Attendance");
   XLSX.writeFile(wb, `${filename}.xlsx`);
 };
-
