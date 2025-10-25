@@ -49,7 +49,7 @@ document.getElementById('stopScan').onclick = () => {
 
 const logTable = document.querySelector("#logTable tbody");
 const attendanceData = [];
-const scannedRecords = {}; // Tracks Time In / Time Out
+const scannedRecords = {}; // Tracks student data and timestamps
 
 function handleScan(data) {
   try {
@@ -58,39 +58,50 @@ function handleScan(data) {
     const id = parsed.id;
 
     if (!scannedRecords[id]) {
-      scannedRecords[id] = { timeIn: null, timeOut: null };
-    }
+      // First scan: create record and row
+      scannedRecords[id] = {
+        name: parsed.name,
+        address: parsed.address,
+        section: parsed.section,
+        timeIn: now,
+        timeOut: null,
+        rowElement: null
+      };
 
-    const record = scannedRecords[id];
-    let scanType = "";
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${parsed.name}</td>
+        <td>${id}</td>
+        <td>${parsed.address}</td>
+        <td>${parsed.section}</td>
+        <td>${now}</td>
+        <td></td>
+      `;
+      logTable.appendChild(row);
+      scannedRecords[id].rowElement = row;
 
-    if (!record.timeIn) {
-      record.timeIn = now;
-      scanType = "TIME IN";
-    } else if (!record.timeOut) {
-      record.timeOut = now;
-      scanType = "TIME OUT";
+      attendanceData.push({
+        Name: parsed.name,
+        ID: id,
+        Address: parsed.address,
+        Section: parsed.section,
+        TimeIn: now,
+        TimeOut: ""
+      });
+
+    } else if (!scannedRecords[id].timeOut) {
+      // Second scan: update Time Out
+      scannedRecords[id].timeOut = now;
+      const row = scannedRecords[id].rowElement;
+      row.cells[5].textContent = now;
+
+      // Update export data
+      const record = attendanceData.find(r => r.ID === id);
+      if (record) record.TimeOut = now;
+
     } else {
       alert(`Student ID ${id} already scanned for both Time In and Time Out.`);
-      return;
     }
-
-    const row = document.createElement("tr");
-    [parsed.name, id, parsed.address, parsed.section, scanType, now].forEach(val => {
-      const cell = document.createElement("td");
-      cell.textContent = val;
-      row.appendChild(cell);
-    });
-
-    logTable.appendChild(row);
-    attendanceData.push({
-      Name: parsed.name,
-      ID: id,
-      Address: parsed.address,
-      Section: parsed.section,
-      Mode: scanType,
-      Time: now
-    });
 
   } catch (e) {
     console.error("Invalid QR format", e);
@@ -104,3 +115,4 @@ document.getElementById("exportBtn").onclick = () => {
   XLSX.utils.book_append_sheet(wb, ws, "Attendance");
   XLSX.writeFile(wb, `${filename}.xlsx`);
 };
+
